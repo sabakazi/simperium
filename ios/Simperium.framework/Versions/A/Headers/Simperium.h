@@ -77,9 +77,6 @@
 
 // OTHER
 
-// Set verbose logging on and off for debugging.
-- (void)setVerboseLoggingEnabled:(BOOL)on;
-
 // Shares an object with a particular user's email address (not yet ready for production use).
 - (void)shareObject:(SPManagedObject *)object withEmail:(NSString *)email bucketName:(NSString *)bucketName;
 
@@ -92,12 +89,6 @@
 // Opens an authentication interface if necessary.
 - (BOOL)authenticateIfNecessary;
 
-// Enables or disables the network.
-- (void)setNetworkEnabled:(BOOL)enabled;
-
-// Overrides the built-in authentication flow so you can customize the behavior.
-- (void)enableManualAuthentication;
-- (void)setAuthenticationEnabled:(BOOL)enabled;
 
 /// Set this to true if you need to be able to cancel the authentication dialog.
 @property (nonatomic, assign) BOOL authenticationOptional;
@@ -111,6 +102,16 @@
 
 /// A SimperiumDelegate for system callbacks.
 @property (nonatomic,assign) id<SimperiumDelegate> delegate;
+
+/// Toggle verbose logging.
+@property (nonatomic) BOOL verboseLoggingEnabled;
+
+/// Enables or disables the network.
+@property (nonatomic) BOOL networkEnabled;
+
+// Overrides the built-in authentication flow so you can customize the behavior.
+@property (nonatomic) BOOL authenticationEnabled;
+
 
 /// Returns the currently authenticated Simperium user.
 @property (nonatomic,retain) SPUser *user;
