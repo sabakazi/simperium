@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 #import "SPBucket.h"
+#import "SPManagedObject.h"
 
 @class Simperium;
 @class SPManagedObject;
@@ -23,18 +24,13 @@
 
 /** Delegate protocol for Simperium system notifications.
  
- You can use this delegate to respond to authentication events and general errors.
+ You can use this delegate to respond to general errors.
  
- Note you can also use SPBucketDelegate if you want explicit callbacks when objects are changed/added/deleted. Standard Core Data notifications are also generated, allowing you to update a `UITableView` (for example) in your `NSFetchedResultsControllerDelegate`. 
+ If you want explicit callbacks when objects are changed/added/deleted, you can also use SPBucketDelegate in SPBucket.h. Standard Core Data notifications are also generated, allowing you to update a `UITableView` (for example) in your `NSFetchedResultsControllerDelegate`. 
  */
 @protocol SimperiumDelegate <NSObject>
 @optional
--(void)simperiumAuthenticationDidSucceed:(Simperium *)simperium;
--(void)simperiumAuthenticationDidFail:(Simperium *)simperium;
--(void)simperiumAuthenticationDidCancel:(Simperium *)simperium;
--(void)simperium:(Simperium *)simperium didFailWithError:(NSError *)error;
-
-// See SPBucketDelegate in SPBucket.h for callbacks that are fired when specific objects change.
+- (void)simperium:(Simperium *)simperium didFailWithError:(NSError *)error;
 @end
 
 // The main class through which you access Simperium.
@@ -52,9 +48,9 @@
 
 // Initializes Simperium.
 #if TARGET_OS_IPHONE
--(id)initWithRootViewController:(UIViewController *)controller;
+- (id)initWithRootViewController:(UIViewController *)controller;
 #else
--(id)initWithWindow:(NSWindow *)aWindow;
+- (id)initWithWindow:(NSWindow *)aWindow;
 #endif
 
 
@@ -62,54 +58,55 @@
 -(void)startWithAppID:(NSString *)identifier
                APIKey:(NSString *)key
                 model:(NSManagedObjectModel *)model
-            context:(NSManagedObjectContext *)context
-        coordinator:(NSPersistentStoreCoordinator *)coordinator;
+              context:(NSManagedObjectContext *)context
+          coordinator:(NSPersistentStoreCoordinator *)coordinator;
 
 // Save and sync all changed objects. If you're using Core Data, this is just a convenience method
 // (you can also just save your context and Simperium will see the changes).
--(BOOL)save;
+- (BOOL)save;
 
 // Get a particular bucket (which, for Core Data, corresponds to a particular Entity name in your model).
--(SPBucket *)bucketForName:(NSString *)name;
+// Once you have a bucket instance, you can set a SPBucketDelegate to react to changes.
+- (SPBucket *)bucketForName:(NSString *)name;
 
-// Convenience methods for accessing the Core Data stack
--(NSManagedObjectContext *)managedObjectContext;
--(NSManagedObjectModel *)managedObjectModel;
--(NSPersistentStoreCoordinator *)persistentStoreCoordinator;
+// Convenience methods for accessing the Core Data stack.
+- (NSManagedObjectContext *)managedObjectContext;
+- (NSManagedObjectModel *)managedObjectModel;
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator;
 
 
 // OTHER
 
-// Set verbose logging on and off for debugging
--(void)setVerboseLoggingEnabled:(BOOL)on;
+// Set verbose logging on and off for debugging.
+- (void)setVerboseLoggingEnabled:(BOOL)on;
 
-// Shares an object with a particular user's email address (not yet ready for production use)
--(void)shareObject:(SPManagedObject *)object withEmail:(NSString *)email bucketName:(NSString *)bucketName;
+// Shares an object with a particular user's email address (not yet ready for production use).
+- (void)shareObject:(SPManagedObject *)object withEmail:(NSString *)email bucketName:(NSString *)bucketName;
 
 // Retrieve past versions of data for a particular object.
--(void)getVersions:(int)numVersions forObject:(SPManagedObject *)object;
+- (void)getVersions:(int)numVersions forObject:(SPManagedObject *)object;
 
-// Alternative to setting delegates on each individual bucket (if you want a single handler for everything)
--(void)setAllBucketDelegates:(id<SPBucketDelegate>)aDelegate;
+// Alternative to setting delegates on each individual bucket (if you want a single handler for everything).
+- (void)setAllBucketDelegates:(id<SPBucketDelegate>)aDelegate;
 
 // Opens an authentication interface if necessary.
--(BOOL)authenticateIfNecessary;
+- (BOOL)authenticateIfNecessary;
 
 // Enables or disables the network.
--(void)setNetworkEnabled:(BOOL)enabled;
+- (void)setNetworkEnabled:(BOOL)enabled;
 
 // Overrides the built-in authentication flow so you can customize the behavior.
--(void)enableManualAuthentication;
--(void)setAuthenticationEnabled:(BOOL)enabled;
+- (void)enableManualAuthentication;
+- (void)setAuthenticationEnabled:(BOOL)enabled;
 
 /// Set this to true if you need to be able to cancel the authentication dialog.
 @property (nonatomic, assign) BOOL authenticationOptional;
 
 // Clears all locally stored data from the device. Can be used to perform a manual sign out.
--(void)clearLocalData;
+- (void)clearLocalData;
 
-//-(NSString *)addBinary:(NSData *)binaryData toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
-//-(void)addBinaryWithFilename:(NSString *)filename toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
+-(NSString *)addBinary:(NSData *)binaryData toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
+-(void)addBinaryWithFilename:(NSString *)filename toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
 
 
 /// A SimperiumDelegate for system callbacks.
@@ -148,7 +145,7 @@
 @property (nonatomic, assign) NSWindow *window;
 #endif
 
-/// Saves without syncing (typically not used)
--(BOOL)saveWithoutSyncing;
+/// Saves without syncing (typically not used).
+- (BOOL)saveWithoutSyncing;
 
 @end
