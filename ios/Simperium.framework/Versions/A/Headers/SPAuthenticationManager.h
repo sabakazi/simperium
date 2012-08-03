@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 typedef void(^SucceededBlockType)(void);
-typedef void(^FailedBlockType)(void);
+typedef void(^FailedBlockType)(int responseCode, NSString *responseString);
 
 @class Simperium;
 
@@ -31,8 +31,8 @@ typedef void(^FailedBlockType)(void);
 
 -(id)initWithDelegate:(id<SPAuthenticationDelegate>)authDelegate simperium:(Simperium *)s;
 -(BOOL)authenticateIfNecessary;
--(void)authenticate:(NSString *)username password:(NSString *)password success:(SucceededBlockType)successBlock failure:(FailedBlockType)failureBlock;
--(void)create:(NSString *)username password:(NSString *)password success:(SucceededBlockType)successBlock failure:(FailedBlockType)failureBlock;
+-(void)authenticateWithUsername:(NSString *)username password:(NSString *)password success:(SucceededBlockType)successBlock failure:(FailedBlockType)failureBlock;
+-(void)createWithUsername:(NSString *)username password:(NSString *)password success:(SucceededBlockType)successBlock failure:(FailedBlockType)failureBlock;
 -(void)reset;
 -(void)cancel;
 
