@@ -77,8 +77,8 @@
 
 // OTHER
 
-// Shares an object with a particular user's email address (not yet ready for production use).
-- (void)shareObject:(SPManagedObject *)object withEmail:(NSString *)email bucketName:(NSString *)bucketName;
+// Shares an object with a particular user's email address.
+- (void)shareObject:(SPManagedObject *)object withEmail:(NSString *)email;
 
 // Retrieve past versions of data for a particular object.
 - (void)getVersions:(int)numVersions forObject:(SPManagedObject *)object;
@@ -148,5 +148,6 @@
 
 /// Saves without syncing (typically not used).
 - (BOOL)saveWithoutSyncing;
+
 
 @end
