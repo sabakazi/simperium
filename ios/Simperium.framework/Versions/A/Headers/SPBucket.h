@@ -16,6 +16,7 @@
 @class SPBucket;
 @class SPChangeProcessor;
 @class SPIndexProcessor;
+@class SPReferenceManager;
 
 /** SPBucketChangeType is used in the bucket:didChangeObjectForKey:forChangeType: method of SPBucketDelegate. It's similar to NSFetchedResultsChangeType, which is used with an NSFetchedResultsControllerDelegate.
  */
@@ -51,6 +52,7 @@ typedef NSUInteger SPBucketChangeType;
     NSString *name;
     NSString *instanceLabel;
     SPNetworkManager *networkManager;
+    SPReferenceManager *referenceManager;
     SPDiffer *differ;
     id<SPStorageProvider>storage;
     SPSchema *schema;
@@ -59,7 +61,6 @@ typedef NSUInteger SPBucketChangeType;
     id<SPBucketDelegate> delegate;
     
     NSString *lastChangeSignature;
-    NSMutableDictionary *pendingReferences;
 }
 
 /// Assign this delegate to be notified when objects in this bucket change (see SPBucketDelegate above)
@@ -100,13 +101,13 @@ typedef NSUInteger SPBucketChangeType;
 @property (nonatomic, retain) id<SPStorageProvider>storage;
 @property (nonatomic, retain) SPNetworkManager *networkManager;
 @property (nonatomic, retain) SPDiffer *differ;
+@property (nonatomic, retain) SPReferenceManager *referenceManager;
 @property (retain) SPChangeProcessor* changeProcessor;
 @property (retain) SPIndexProcessor* indexProcessor;
 @property (assign) dispatch_queue_t processorQueue;
 @property (nonatomic, copy) NSString *lastChangeSignature;
 
--(id)initWithSchema:(SPSchema *)aSchema storage:(id<SPStorageProvider>)aStorage networkManager:(SPNetworkManager *)netManager label:(NSString *)label;
--(void)addPendingReferenceToKey:(NSString *)key fromKey:(NSString *)fromKey className:(NSString *)className memberName:(NSString *)memberName;
+-(id)initWithSchema:(SPSchema *)aSchema storage:(id<SPStorageProvider>)aStorage networkManager:(SPNetworkManager *)netManager referenceManager:(SPReferenceManager *)refManager label:(NSString *)label;
 -(void)validateObjects;
 -(void)unloadAllObjects;
 
