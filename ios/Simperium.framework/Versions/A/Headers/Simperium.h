@@ -10,6 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "SPBucket.h"
 #import "SPManagedObject.h"
+#import "SPAuthenticationManager.h"
 
 @class Simperium;
 @class SPManagedObject;
@@ -24,7 +25,7 @@
 
 /** Delegate protocol for Simperium system notifications.
  
- You can use this delegate to respond to general errors.
+ You can use this delegate to respond to general events and errors.
  
  If you want explicit callbacks when objects are changed/added/deleted, you can also use SPBucketDelegate in SPBucket.h. Standard Core Data notifications are also generated, allowing you to update a `UITableView` (for example) in your `NSFetchedResultsControllerDelegate`. 
  */
@@ -34,7 +35,7 @@
 @end
 
 // The main class through which you access Simperium.
-@interface Simperium : NSObject {
+@interface Simperium : NSObject<SPAuthenticationDelegate> {
     SPUser *user;
     NSString *label;
     NSString *appID;
@@ -96,8 +97,8 @@
 // Clears all locally stored data from the device. Can be used to perform a manual sign out.
 - (void)clearLocalData;
 
--(NSString *)addBinary:(NSData *)binaryData toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
--(void)addBinaryWithFilename:(NSString *)filename toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName memberName:(NSString *)memberName;
+-(NSString *)addBinary:(NSData *)binaryData toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName attributeName:(NSString *)attributeName;
+-(void)addBinaryWithFilename:(NSString *)filename toObject:(SPManagedObject *)object bucketName:(NSString *)bucketName attributeName:(NSString *)attributeName;
 
 
 /// A SimperiumDelegate for system callbacks.
@@ -111,7 +112,6 @@
 
 // Overrides the built-in authentication flow so you can customize the behavior.
 @property (nonatomic) BOOL authenticationEnabled;
-
 
 /// Returns the currently authenticated Simperium user.
 @property (nonatomic,retain) SPUser *user;
