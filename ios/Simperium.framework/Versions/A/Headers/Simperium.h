@@ -32,6 +32,8 @@
 @protocol SimperiumDelegate <NSObject>
 @optional
 - (void)simperium:(Simperium *)simperium didFailWithError:(NSError *)error;
+- (void)simperiumDidStartNetworkActivity:(Simperium *)simperium;
+- (void)simperiumDidFinishNetworkActivity:(Simperium *)simperium;
 @end
 
 // The main class through which you access Simperium.
@@ -113,11 +115,17 @@
 // Overrides the built-in authentication flow so you can customize the behavior.
 @property (nonatomic) BOOL authenticationEnabled;
 
+// Toggle websockets (should only be done before starting Simperium).
+@property (nonatomic, assign) BOOL useWebSockets;
+
 /// Returns the currently authenticated Simperium user.
 @property (nonatomic,retain) SPUser *user;
 
 /// The full URL used to communicate with Simperium.
 @property (nonatomic,readonly) NSString *appURL;
+
+/// URL to a Simperium server (can be changed to point to a custom installation).
+@property (nonatomic,copy) NSString *rootURL;
 
 /// A unique ID for this app (configured at simperium.com).
 @property (nonatomic,readonly) NSString *appID;

@@ -44,6 +44,7 @@ typedef NSUInteger SPBucketChangeType;
 -(void)bucket:(SPBucket *)bucket didReceiveObjectForKey:(NSString *)key version:(NSString *)version data:(NSDictionary *)data;
 -(void)bucketDidAcknowledgeDelete:(SPBucket *)bucket;
 -(void)bucket:(SPBucket *)bucket didFailWithError:(NSError *)error;
+-(void)bucket:(SPBucket *)bucket didShareObjectForKey:(NSString *)key withEmail:(NSString *)email;
 @end
 
 /** An SPBucket instance is conceptually a collection of all objects of a particular type. If you're using Core Data, there is one SPBucket per Entity in your model, and it's used to track all objects corresponding to that Entity type.
